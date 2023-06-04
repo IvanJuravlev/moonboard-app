@@ -16,7 +16,7 @@ public class TrackService {
 
     @Transactional
     public Track createTrack(long userId, Track track) {
-        /**Сделать маппер для сущности TrackCreate */
+        /**Сделать маппер для сущности TrackCreate. Подумать о добавлении даты создания трассы */
         track.setCreatorId(userId);
 
         return trackRepository.save(track);
@@ -24,8 +24,7 @@ public class TrackService {
 
     @Transactional
     public Track updateTrack(long userId, long trackId, TrackUpdate changedTrack) {
-        /**Добавить проверку на пользователя обновляющего трассу
-         * Сделать DTO для обновленной сущности - нельзя изменить рейтинг, количество пролазов, грейд и средний грейд*/
+        /**Добавить проверку на пользователя обновляющего трассу*/
         Track track = getTrackById(trackId);
         if (!changedTrack.getName().isEmpty()) {
             track.setName(changedTrack.getName());
@@ -33,13 +32,10 @@ public class TrackService {
         if (!changedTrack.getDescription().isEmpty()) {
             track.setDescription(changedTrack.getDescription());
         }
-
-        if (!changedTrack.getTrackNumberField().isEmpty()) {
-            track.setTrackNumberField(changedTrack.getTrackNumberField());
-        }
         if (!changedTrack.getVideoUrl().isEmpty()) {
             track.setVideoUrl(changedTrack.getVideoUrl());
         }
+
         trackRepository.save(track);
         return track;
     }

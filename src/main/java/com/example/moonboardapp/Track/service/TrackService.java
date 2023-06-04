@@ -1,6 +1,7 @@
 package com.example.moonboardapp.Track.service;
 
 import com.example.moonboardapp.Track.Dto.TrackUpdate;
+import com.example.moonboardapp.Track.exception.NotFoundException;
 import com.example.moonboardapp.Track.model.Track;
 import com.example.moonboardapp.Track.repository.TrackRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class TrackService {
     @Transactional
     public Track updateTrack(long userId, long trackId, TrackUpdate changedTrack) {
         /**Добавить проверку на пользователя обновляющего трассу*/
+
         Track track = getTrackById(trackId);
         if (!changedTrack.getName().isEmpty()) {
             track.setName(changedTrack.getName());
@@ -41,10 +43,19 @@ public class TrackService {
     }
 
     public Track getTrackById(long id) {
-        return trackRepository.findById(id).orElseThrow();
+        return trackRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format("Трасса с id %d не найдена", id)));
     }
 
     public List<Track> getAllTracks() {
         return trackRepository.findAll();
     }
+
+    public void deleteTrackById(long userId, long trackId){
+        /**Добавить проверку на пользователя обновляющего трассу*/
+        getTrackById(trackId);
+
+        trackRepository.deleteById(trackId);
+    }
+
 }

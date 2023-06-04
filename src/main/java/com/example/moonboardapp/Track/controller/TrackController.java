@@ -38,4 +38,11 @@ public class TrackController {
     public List<Track> getAllTracks() {
         return trackService.getAllTracks();
     }
+
+    @DeleteMapping("{trackId}")
+    public void deleteTrackById(@RequestHeader long userId,
+                                @PathVariable long trackId){
+        trackService.deleteTrackById(userId, trackId);
+    }
+
 }

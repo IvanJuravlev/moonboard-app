@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,6 +21,7 @@ public class TrackService {
     public Track createTrack(long userId, Track track) {
         /**Сделать маппер для сущности TrackCreate. Подумать о добавлении даты создания трассы */
         track.setCreatorId(userId);
+        track.setPublishedDate(Timestamp.valueOf(LocalDateTime.now()));
 
         return trackRepository.save(track);
     }

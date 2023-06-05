@@ -34,6 +34,11 @@ public class TrackController {
         return trackService.getTrackById(id);
     }
 
+    @GetMapping("/user")
+    public List<Track> getTracksByUserId(@RequestHeader long userId){
+        return trackService.getTracksByUserId(userId);
+    }
+
     @GetMapping
     public List<Track> getAllTracks() {
         return trackService.getAllTracks();

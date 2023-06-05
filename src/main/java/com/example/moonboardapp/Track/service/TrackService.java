@@ -19,7 +19,7 @@ public class TrackService {
 
     @Transactional
     public Track createTrack(long userId, Track track) {
-        /**Сделать маппер для сущности TrackCreate. Подумать о добавлении даты создания трассы */
+        /**Сделать маппер для сущности TrackCreate.*/
         track.setCreatorId(userId);
         track.setPublishedDate(Timestamp.valueOf(LocalDateTime.now()));
 
@@ -28,7 +28,8 @@ public class TrackService {
 
     @Transactional
     public Track updateTrack(long userId, long trackId, TrackUpdate changedTrack) {
-        /**Добавить проверку на пользователя обновляющего трассу*/
+        /**Добавить проверку на пользователя обновляющего трассу
+         * Добавить поле "Дата изменения. Может быть*/
 
         Track track = getTrackById(trackId);
         if (!changedTrack.getName().isEmpty()) {
@@ -50,12 +51,18 @@ public class TrackService {
                 () -> new NotFoundException(String.format("Трасса с id %d не найдена", id)));
     }
 
+    public List<Track> getTracksByUserId(long userId){
+        /**Добавить проверку на пользователя*/
+
+        return trackRepository.findByCreatorId(userId);
+    }
+
     public List<Track> getAllTracks() {
         return trackRepository.findAll();
     }
 
     public void deleteTrackById(long userId, long trackId){
-        /**Добавить проверку на пользователя обновляющего трассу*/
+        /**Добавить проверку на пользователя*/
         getTrackById(trackId);
 
         trackRepository.deleteById(trackId);

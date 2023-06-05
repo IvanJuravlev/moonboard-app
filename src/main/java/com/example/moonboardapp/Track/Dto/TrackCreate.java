@@ -15,6 +15,6 @@ public class TrackCreate {
     String name;
     String description;
     String grade;
-    private List<String> trackNumberField;
+    List<String> trackNumberField;
     String videoUrl;
 }

@@ -25,7 +25,7 @@ public class Track {
     int rating;
     @ElementCollection
     @CollectionTable(name = "track_hooks", joinColumns = @JoinColumn(name = "trackId"))
-    private List<String> trackNumberField;
+    List<String> trackNumberField;
     String videoUrl;
     int climbs;
     String averageGrade;

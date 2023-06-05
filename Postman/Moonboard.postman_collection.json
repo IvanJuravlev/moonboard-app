@@ -127,6 +127,32 @@
 			"response": []
 		},
 		{
+			"name": "Получить все трассы пользователя",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "userId",
+						"value": "2",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/track/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"track",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Получить все трассы Copy",
 			"request": {
 				"method": "DELETE",

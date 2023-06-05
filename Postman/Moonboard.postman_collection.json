@@ -1,0 +1,188 @@
+{
+	"info": {
+		"_postman_id": "e112adf6-441e-407f-9eb3-ccb995e0d86f",
+		"name": "Moonboard",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26504484"
+	},
+	"item": [
+		{
+			"name": "Добавить трассу",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "userId",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"name\",\r\n    \"description\": \"Description\",\r\n    \"grade\": \"6b\",\r\n    \"trackNumberField\": [\"A1, B2, C6\"],\r\n    \"videoUrl\": \"videoUrl\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/track",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"track"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Редактировать трассу",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "userId",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"nameNew\",\r\n    \"description\": \"DescriptionNew\",\r\n    \"videoUrl\": \"videoUrl\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/track/:trackId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"track",
+						":trackId"
+					],
+					"variable": [
+						{
+							"key": "trackId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить трассу по id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/track/:trackId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"track",
+						":trackId"
+					],
+					"variable": [
+						{
+							"key": "trackId",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить все трассы",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/track",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"track"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить все трассы пользователя",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "userId",
+						"value": "2",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/track/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"track",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить все трассы Copy",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "userId",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/track/:trackId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"track",
+						":trackId"
+					],
+					"variable": [
+						{
+							"key": "trackId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

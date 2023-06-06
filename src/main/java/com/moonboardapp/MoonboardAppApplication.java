@@ -1,4 +1,4 @@
-package com.example.moonboardapp;
+package com.moonboardapp;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;

@@ -1,6 +1,6 @@
-package com.example.moonboardapp.Track.model;
+package com.moonboardapp.problem.model;
 
-import com.example.moonboardapp.Track.Grades.Grade;
+import com.moonboardapp.problem.grades.Grade;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,16 +9,16 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Table(name = "track")
+@Table(name = "problem")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Track {
+public class Problem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long trackId;
+    long problemId;
     long creatorId;
     String name;
     String description;
@@ -27,8 +27,8 @@ public class Track {
     Grade grade;
     int rating;
     @ElementCollection
-    @CollectionTable(name = "track_hooks", joinColumns = @JoinColumn(name = "trackId"))
-    List<String> trackNumberField;
+    @CollectionTable(name = "problem_hooks", joinColumns = @JoinColumn(name = "problem_id"))
+    List<String> problemNumberField;
     String videoUrl;
     int climbs;
     String averageGrade;

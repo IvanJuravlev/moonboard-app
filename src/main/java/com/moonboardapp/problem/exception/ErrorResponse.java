@@ -1,4 +1,4 @@
-package com.example.moonboardapp.Track.exception;
+package com.moonboardapp.problem.exception;
 
 public class ErrorResponse {
     private final String error;

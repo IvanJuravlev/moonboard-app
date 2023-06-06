@@ -1,15 +1,20 @@
-package com.example.moonboardapp.Track.Dto;
+package com.moonboardapp.problem.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TrackUpdate {
+public class NewProblemDto {
+    long creatorId;
     String name;
     String description;
+    long grade;
+    List<String> problemNumberField;
     String videoUrl;
 }

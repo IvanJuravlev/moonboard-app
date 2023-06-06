@@ -1,4 +1,4 @@
-package com.example.moonboardapp.Track.exception;
+package com.moonboardapp.problem.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

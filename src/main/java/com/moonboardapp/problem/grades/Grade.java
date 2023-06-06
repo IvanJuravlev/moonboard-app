@@ -1,4 +1,4 @@
-package com.example.moonboardapp.Track.Grades;
+package com.moonboardapp.problem.grades;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

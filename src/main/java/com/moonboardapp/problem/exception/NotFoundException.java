@@ -1,4 +1,4 @@
-package com.example.moonboardapp.Track.exception;
+package com.moonboardapp.problem.exception;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

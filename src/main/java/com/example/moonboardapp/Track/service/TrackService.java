@@ -1,6 +1,9 @@
 package com.example.moonboardapp.Track.service;
 
+import com.example.moonboardapp.Track.Dto.NewTrackDto;
 import com.example.moonboardapp.Track.Dto.TrackUpdate;
+import com.example.moonboardapp.Track.Grades.Grade;
+import com.example.moonboardapp.Track.Grades.GradeRepository;
 import com.example.moonboardapp.Track.exception.NotFoundException;
 import com.example.moonboardapp.Track.model.Track;
 import com.example.moonboardapp.Track.repository.TrackRepository;
@@ -16,12 +19,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TrackService {
     private final TrackRepository trackRepository;
+    private final GradeRepository gradeRepository;
 
     @Transactional
-    public Track createTrack(long userId, Track track) {
+    public Track createTrack(long userId, NewTrackDto newTrackDto) {
         /**Сделать маппер для сущности TrackCreate.*/
-        track.setCreatorId(userId);
-        track.setPublishedDate(Timestamp.valueOf(LocalDateTime.now()));
+
+        Grade grade = gradeRepository.findById(newTrackDto.getGrade()).orElseThrow();
+        Track track = Track.builder().name(newTrackDto.getName()).
+                creatorId(userId).
+                trackNumberField(newTrackDto.getTrackNumberField()).
+                description(newTrackDto.getDescription()).
+                videoUrl(newTrackDto.getVideoUrl()).
+                grade(grade).
+                publishedDate(Timestamp.valueOf(LocalDateTime.now())).build();
 
         return trackRepository.save(track);
     }

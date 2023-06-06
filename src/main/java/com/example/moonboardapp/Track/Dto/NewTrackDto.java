@@ -10,11 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TrackCreate {
+public class NewTrackDto {
     long creatorId;
     String name;
     String description;
-    String grade;
+    long grade;
     List<String> trackNumberField;
     String videoUrl;
 }

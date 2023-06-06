@@ -1,5 +1,6 @@
 package com.example.moonboardapp.Track.model;
 
+import com.example.moonboardapp.Track.Grades.Grade;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,7 +22,9 @@ public class Track {
     long creatorId;
     String name;
     String description;
-    String grade;
+    @ManyToOne
+    @JoinColumn(name = "grade")
+    Grade grade;
     int rating;
     @ElementCollection
     @CollectionTable(name = "track_hooks", joinColumns = @JoinColumn(name = "trackId"))

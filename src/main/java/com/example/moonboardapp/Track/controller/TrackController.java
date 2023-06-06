@@ -1,5 +1,6 @@
 package com.example.moonboardapp.Track.controller;
 
+import com.example.moonboardapp.Track.Dto.NewTrackDto;
 import com.example.moonboardapp.Track.Dto.TrackUpdate;
 import com.example.moonboardapp.Track.model.Track;
 import com.example.moonboardapp.Track.service.TrackService;
@@ -18,7 +19,7 @@ public class TrackController {
 
     @PostMapping
     public Track createTrack(@RequestHeader long userId,
-                            @RequestBody Track track) {
+                            @RequestBody NewTrackDto track) {
        return trackService.createTrack(userId, track);
     }
 

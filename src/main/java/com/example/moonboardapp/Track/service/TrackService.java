@@ -42,7 +42,6 @@ public class TrackService {
             track.setVideoUrl(changedTrack.getVideoUrl());
         }
 
-        trackRepository.save(track);
         return track;
     }
 
@@ -58,6 +57,7 @@ public class TrackService {
     }
 
     public List<Track> getAllTracks() {
+        /**Добавить Pageble */
         return trackRepository.findAll();
     }
 

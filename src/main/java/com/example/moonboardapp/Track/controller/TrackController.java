@@ -17,16 +17,16 @@ public class TrackController {
     private final TrackService trackService;
 
     @PostMapping
-    public void createTrack(@RequestHeader long userId,
+    public Track createTrack(@RequestHeader long userId,
                             @RequestBody Track track) {
-        trackService.createTrack(userId, track);
+       return trackService.createTrack(userId, track);
     }
 
     @PatchMapping("{trackId}")
-    public void updateTrack(@RequestHeader long userId,
+    public Track updateTrack(@RequestHeader long userId,
                             @PathVariable long trackId,
                             @RequestBody TrackUpdate track) {
-        trackService.updateTrack(userId, trackId, track);
+       return trackService.updateTrack(userId, trackId, track);
     }
 
     @GetMapping("{id}")

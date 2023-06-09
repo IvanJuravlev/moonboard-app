@@ -19,7 +19,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ShortUserDto createUser(@Valid @RequestBody ShortUserDto userDto) {
+    public UserDto createUser(@Valid @RequestBody ShortUserDto userDto) {
         return userService.createUser(userDto);
     }
 
@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PatchMapping("{userId}")
-    public ShortUserDto updateUser(@PathVariable long userId, @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable long userId, @RequestBody UserDto userDto) {
         return userService.updateUser(userId, userDto);
     }
 

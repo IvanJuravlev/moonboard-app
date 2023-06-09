@@ -18,16 +18,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ShortUserDto createUser(ShortUserDto shortUserDto) {
+    public UserDto createUser(ShortUserDto shortUserDto) {
         User user = userRepository.save(UserMapper.USER_MAPPER.toUserFromShortDto(shortUserDto));
         log.info("User created with id {}", user.getUserId());
-        return UserMapper.USER_MAPPER.toShortUserDto(user);
+        return UserMapper.USER_MAPPER.toUserDto(user);
     }
 
     @Transactional
-    public ShortUserDto updateUser(long userId, UserDto userDto) {
+    public UserDto updateUser(long userId, UserDto userDto) {
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException(String.format("Пользователь с id %d не найден", userId)));
+                new NotFoundException(String.format("User with id %d not found", userId)));
         if (!userDto.getName().isEmpty()) {
             user.setName(userDto.getName());
         }
@@ -37,18 +37,18 @@ public class UserService {
         if (!userDto.getCity().isEmpty()) {
             user.setCity(userDto.getCity());
         }
-        return UserMapper.USER_MAPPER.toShortUserDto(user);
+        return UserMapper.USER_MAPPER.toUserDto(user);
     }
 
     public UserDto getUserById(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException(String.format("Пользователь с id %d не найден", userId)));
+                new NotFoundException(String.format("User with id %d not found", userId)));
         return UserMapper.USER_MAPPER.toUserDto(user);
     }
 
     public void deleteUser(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException(String.format("Пользователь с id %d не найден", userId)));
+                new NotFoundException(String.format("User with id %d not found", userId)));
         userRepository.deleteById(userId);
         log.info("User with id {} deleted", user.getUserId());
     }

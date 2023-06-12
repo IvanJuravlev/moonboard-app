@@ -133,13 +133,13 @@
 				"header": [
 					{
 						"key": "userId",
-						"value": "1",
+						"value": "2",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"name\",\r\n    \"description\": \"Description\",\r\n    \"grade\": \"6b\",\r\n    \"trackNumberField\": [\"A1, B2, C6\"],\r\n    \"videoUrl\": \"videoUrl\"\r\n}",
+					"raw": "{\r\n    \"name\": \"name\",\r\n    \"description\": \"Description\",\r\n    \"grade\": 1,\r\n    \"problemNumberField\": [\"A1, B2, C6\"],\r\n    \"videoUrl\": \"videoUrl\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -147,14 +147,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/track",
+					"raw": "http://localhost:8080/problem",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"track"
+						"problem"
 					]
 				}
 			},
@@ -181,19 +181,19 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/track/:trackId",
+					"raw": "http://localhost:8080/problem/:problemId",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"track",
-						":trackId"
+						"problem",
+						":problemId"
 					],
 					"variable": [
 						{
-							"key": "trackId",
+							"key": "problemId",
 							"value": "1"
 						}
 					]
@@ -207,20 +207,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/track/:trackId",
+					"raw": "http://localhost:8080/problem/:problemId",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"track",
-						":trackId"
+						"problem",
+						":problemId"
 					],
 					"variable": [
 						{
-							"key": "trackId",
-							"value": "0"
+							"key": "problemId",
+							"value": "1"
 						}
 					]
 				}
@@ -233,14 +233,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/track",
+					"raw": "http://localhost:8080/problem",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"track"
+						"problem"
 					]
 				}
 			},
@@ -258,14 +258,14 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/track/user",
+					"raw": "http://localhost:8080/problem/user",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"track",
+						"problem",
 						"user"
 					]
 				}
@@ -273,7 +273,7 @@
 			"response": []
 		},
 		{
-			"name": "Получить все трассы Copy",
+			"name": "Удалить трассу по id",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -284,19 +284,19 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/track/:trackId",
+					"raw": "http://localhost:8080/problem/:problemId",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"track",
-						":trackId"
+						"problem",
+						":problemId"
 					],
 					"variable": [
 						{
-							"key": "trackId",
+							"key": "problemId",
 							"value": "1"
 						}
 					]

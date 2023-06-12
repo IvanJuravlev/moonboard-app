@@ -1,10 +1,11 @@
 package com.moonboardapp.problem.service;
 
-import com.moonboardapp.problem.dto.NewProblemDto;
+import com.moonboardapp.problem.dto.ProblemDto;
 import com.moonboardapp.problem.dto.ProblemUpdateDto;
 import com.moonboardapp.problem.grades.Grade;
 import com.moonboardapp.problem.grades.GradeRepository;
 import com.moonboardapp.problem.exception.NotFoundException;
+import com.moonboardapp.problem.mapper.ProblemMapper;
 import com.moonboardapp.problem.model.Problem;
 import com.moonboardapp.problem.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,54 +24,68 @@ public class ProblemService {
     private final GradeRepository gradeRepository;
 
     @Transactional
-    public Problem createProblem(long userId, NewProblemDto newProblemDto) {
+    public ProblemDto createProblem(long userId, ProblemDto problemDto) {
         /**Сделать маппер для сущности TrackCreate.*/
 
-        Grade grade = gradeRepository.findById(newProblemDto.getGrade()).orElseThrow();
-        Problem track = Problem.builder().name(newProblemDto.getName()).
+        Grade grade = gradeRepository.findById(problemDto.getGrade()).orElseThrow();
+        Problem problem = Problem.builder().name(problemDto.getName()).
                 creatorId(userId).
-                problemNumberField(newProblemDto.getProblemNumberField()).
-                description(newProblemDto.getDescription()).
-                videoUrl(newProblemDto.getVideoUrl()).
+                problemNumberField(problemDto.getProblemNumberField()).
+                description(problemDto.getDescription()).
+                videoUrl(problemDto.getVideoUrl()).
                 grade(grade).
                 publishedDate(Timestamp.valueOf(LocalDateTime.now())).build();
 
-        return problemRepository.save(track);
+        return ProblemMapper.PROBLEM_MAPPER.toProblemDto(problemRepository.save(problem));
     }
 
     @Transactional
-    public Problem updateProblem(long userId, long problemId, ProblemUpdateDto changedTrack) {
+    public ProblemDto updateProblem(long userId, long problemId, ProblemUpdateDto changedTrack) {
         /**Добавить проверку на пользователя обновляющего трассу
          * Добавить поле "Дата изменения. Может быть*/
 
-        Problem track = getProblemById(problemId);
+        Problem problem = problemRepository.findById(problemId).orElseThrow(
+                () -> new NotFoundException(String.format("Трасса с id %d не найдена", problemId)));
         if (!changedTrack.getName().isEmpty()) {
-            track.setName(changedTrack.getName());
+            problem.setName(changedTrack.getName());
         }
         if (!changedTrack.getDescription().isEmpty()) {
-            track.setDescription(changedTrack.getDescription());
+            problem.setDescription(changedTrack.getDescription());
         }
         if (!changedTrack.getVideoUrl().isEmpty()) {
-            track.setVideoUrl(changedTrack.getVideoUrl());
+            problem.setVideoUrl(changedTrack.getVideoUrl());
         }
 
-        return track;
+        return ProblemMapper.PROBLEM_MAPPER.toProblemDto(problem);
     }
 
-    public Problem getProblemById(long id) {
-        return problemRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Трасса с id %d не найдена", id)));
+    public ProblemDto getProblemById(long id) {
+        return ProblemMapper.PROBLEM_MAPPER.toProblemDto(problemRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format("Problem with id %d not found", id))));
     }
 
-    public List<Problem> getProblemsByUserId(long userId){
+    public List<ProblemDto> getProblemsByUserId(long userId){
         /**Добавить проверку на пользователя*/
 
-        return problemRepository.findByCreatorId(userId);
+        List<Problem> problems = problemRepository.findByCreatorId(userId);
+        List<ProblemDto> problemDtos = new ArrayList<>();
+
+        for (Problem p : problems){
+            problemDtos.add(ProblemMapper.PROBLEM_MAPPER.toProblemDto(p));
+        }
+
+        return problemDtos;
     }
 
-    public List<Problem> getAllProblems() {
+    public List<ProblemDto> getAllProblems() {
         /**Добавить Pageble */
-        return problemRepository.findAll();
+        List<Problem> problems = problemRepository.findAll();
+        List<ProblemDto> problemDtos = new ArrayList<>();
+
+        for (Problem p : problems){
+            problemDtos.add(ProblemMapper.PROBLEM_MAPPER.toProblemDto(p));
+        }
+        return problemDtos;
     }
 
     public void deleteProblemById(long userId, long problemId){

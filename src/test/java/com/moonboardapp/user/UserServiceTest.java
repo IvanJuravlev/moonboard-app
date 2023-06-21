@@ -1,6 +1,6 @@
 package com.moonboardapp.user;
 
-import com.moonboardapp.track.exception.NotFoundException;
+import com.moonboardapp.exception.NotFoundException;
 import com.moonboardapp.user.dto.UserDto;
 import com.moonboardapp.user.mapper.UserMapper;
 import com.moonboardapp.user.model.User;

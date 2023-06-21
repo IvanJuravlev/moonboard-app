@@ -16,22 +16,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Problem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long problemId;
-    long creatorId;
-    String name;
-    String description;
-    @ManyToOne
-    @JoinColumn(name = "grade")
-    Grade grade;
-    int rating;
-    @ElementCollection
-    @CollectionTable(name = "problem_hooks", joinColumns = @JoinColumn(name = "problem_id"))
-    List<String> problemNumberField;
-    String videoUrl;
-    int climbs;
-    String averageGrade;
-    Timestamp publishedDate;
-}
+    public class Problem {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        long problemId;
+        long creatorId;
+        String name;
+        String description;
+        @ManyToOne
+        @JoinColumn(name = "grade")
+        Grade grade;
+        int rating;
+        @ElementCollection
+        @CollectionTable(name = "problem_hooks", joinColumns = @JoinColumn(name = "problem_id"))
+        List<String> problemNumberField;
+        String videoUrl;
+        int climbs;
+        String averageGrade;
+        Timestamp publishedDate;
+    }

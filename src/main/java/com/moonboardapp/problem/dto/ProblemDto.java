@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProblemDto {
-    long id;
+    long problemId;
     @NotNull
     long creatorId;
     @NotNull

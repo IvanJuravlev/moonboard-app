@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TrackingProblemDto {
     long id;
-    long problem;
-    long user;
+    long problemId;
+    long userId;
     boolean climbed;
     Long attempts;
     String videoUrl;

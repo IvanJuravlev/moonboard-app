@@ -11,16 +11,16 @@ import org.mapstruct.factory.Mappers;
 public interface TrackingProblemMapper {
     TrackingProblemMapper TRACKING_PROBLEM_MAPPER = Mappers.getMapper(TrackingProblemMapper.class);
 
-    @Mapping(target = "problem.problemId", source = "problem")
-    @Mapping(target = "user.userId", source = "user")
+    @Mapping(target = "problem.problemId", source = "problemId")
+    @Mapping(target = "user.userId", source = "userId")
     TrackingProblem toTrackingProblemFromShortDto(ShortTrackingProblemDto shortTrackingProblemDto);
 
-    @Mapping(target = "problem", source = "problem.problemId")
-    @Mapping(target = "user", source = "user.userId")
+    @Mapping(target = "problemId", source = "problem.problemId")
+    @Mapping(target = "userId", source = "user.userId")
     ShortTrackingProblemDto toShortTrackingProblemDto(TrackingProblem trackingProblem);
 
-    @Mapping(target = "problem", source = "problem.problemId")
-    @Mapping(target = "user", source = "user.userId")
+    @Mapping(target = "problemId", source = "problem.problemId")
+    @Mapping(target = "userId", source = "user.userId")
     TrackingProblemDto toTrackingProblemDto(TrackingProblem trackingProblem);
 
 

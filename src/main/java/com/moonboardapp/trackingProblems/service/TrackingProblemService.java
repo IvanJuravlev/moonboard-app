@@ -33,8 +33,8 @@ public class TrackingProblemService {
 
     @Transactional
     public TrackingProblemDto create(ShortTrackingProblemDto shortTrackingProblemDto) {
-        checkUser(shortTrackingProblemDto.getUser());
-        checkProblem(shortTrackingProblemDto.getProblem());
+        checkUser(shortTrackingProblemDto.getUserId());
+        checkProblem(shortTrackingProblemDto.getProblemId());
         TrackingProblem trackingProblem = TrackingProblemMapper.TRACKING_PROBLEM_MAPPER
                 .toTrackingProblemFromShortDto(shortTrackingProblemDto);
         if (trackingProblem.isClimbed()) {

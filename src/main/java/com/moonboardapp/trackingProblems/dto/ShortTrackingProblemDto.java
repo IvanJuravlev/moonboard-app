@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShortTrackingProblemDto {
     @NotNull
-    long problem;
+    long problemId;
     @NotNull
-    long user;
+    long userId;
     boolean climbed;
     Long attempts;
     String videoUrl;

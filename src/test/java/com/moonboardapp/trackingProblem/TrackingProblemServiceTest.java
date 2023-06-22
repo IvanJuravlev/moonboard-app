@@ -84,8 +84,8 @@ public class TrackingProblemServiceTest {
         trackingProblemDto.setId(1L);
 
         assertEquals(1L, trackingProblemDto.getId());
-        assertEquals(1L, trackingProblemDto.getProblem());
-        assertEquals(1L, trackingProblemDto.getUser());
+        assertEquals(1L, trackingProblemDto.getProblemId());
+        assertEquals(1L, trackingProblemDto.getUserId());
         assertEquals(false, trackingProblemDto.isClimbed());
         assertEquals(4L, trackingProblemDto.getAttempts());
         assertEquals("videoUrl", trackingProblemDto.getVideoUrl());
@@ -101,8 +101,8 @@ public class TrackingProblemServiceTest {
                 service.update(1L, updateTrackingProblemDto);
 
         assertEquals(1L, trackingProblemDto.getId());
-        assertEquals(1L, trackingProblemDto.getProblem());
-        assertEquals(1L, trackingProblemDto.getUser());
+        assertEquals(1L, trackingProblemDto.getProblemId());
+        assertEquals(1L, trackingProblemDto.getUserId());
         assertEquals(true, trackingProblemDto.isClimbed());
         assertEquals(6L, trackingProblemDto.getAttempts());
         assertEquals("SomeOtherVideo", trackingProblemDto.getVideoUrl());
@@ -145,8 +145,8 @@ public class TrackingProblemServiceTest {
         List<TrackingProblemDto> trackingProblemDtoList = service.getByUserId(1L, pageable);
 
         assertEquals(1L, trackingProblemDtoList.get(0).getId());
-        assertEquals(1L, trackingProblemDtoList.get(0).getProblem());
-        assertEquals(1L, trackingProblemDtoList.get(0).getUser());
+        assertEquals(1L, trackingProblemDtoList.get(0).getProblemId());
+        assertEquals(1L, trackingProblemDtoList.get(0).getUserId());
         assertEquals(false, trackingProblemDtoList.get(0).isClimbed());
         assertEquals(4L, trackingProblemDtoList.get(0).getAttempts());
         assertEquals("videoUrl", trackingProblemDtoList.get(0).getVideoUrl());

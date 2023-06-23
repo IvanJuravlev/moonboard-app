@@ -4,7 +4,7 @@ import com.moonboardapp.problem.dto.ProblemDto;
 import com.moonboardapp.problem.dto.ProblemUpdateDto;
 import com.moonboardapp.problem.grades.Grade;
 import com.moonboardapp.problem.grades.GradeRepository;
-import com.moonboardapp.problem.exception.NotFoundException;
+import com.moonboardapp.exception.NotFoundException;
 import com.moonboardapp.problem.mapper.ProblemMapper;
 import com.moonboardapp.problem.model.Problem;
 import com.moonboardapp.problem.repository.ProblemRepository;
@@ -28,15 +28,15 @@ public class ProblemService {
         /**Сделать маппер для сущности TrackCreate.*/
 
         Grade grade = gradeRepository.findById(problemDto.getGrade()).orElseThrow();
-        Problem problem = Problem.builder().name(problemDto.getName()).
+        Problem problem = problemRepository.save(Problem.builder().name(problemDto.getName()).
                 creatorId(userId).
                 problemNumberField(problemDto.getProblemNumberField()).
                 description(problemDto.getDescription()).
                 videoUrl(problemDto.getVideoUrl()).
                 grade(grade).
-                publishedDate(Timestamp.valueOf(LocalDateTime.now())).build();
+                publishedDate(Timestamp.valueOf(LocalDateTime.now())).build());
 
-        return ProblemMapper.PROBLEM_MAPPER.toProblemDto(problemRepository.save(problem));
+        return ProblemMapper.PROBLEM_MAPPER.toProblemDto(problem);
     }
 
     @Transactional

@@ -27,6 +27,7 @@ public class TrackingProblem {
     User user;
     boolean climbed;
     Long attempts;
+    double rating;
     String videoUrl;
     LocalDateTime finishingTime;
 }

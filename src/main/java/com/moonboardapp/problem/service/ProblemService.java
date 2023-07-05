@@ -95,4 +95,14 @@ public class ProblemService {
         problemRepository.deleteById(problemId);
     }
 
+    public void addRating(long problemId, int rating) {
+        Problem problem = problemRepository.findById(problemId).orElseThrow( () ->
+        new NotFoundException(String.format("Problem with id %d not found", problemId)));
+        double totalScore  = problem.getRating() * problem.getClimbs() + rating;
+        int updatedClimbs = problem.getClimbs() + 1;
+        double updatedRating = totalScore / updatedClimbs;
+
+        problem.setRating(updatedRating);
+        problem.setClimbs(updatedClimbs);
+    }
 }

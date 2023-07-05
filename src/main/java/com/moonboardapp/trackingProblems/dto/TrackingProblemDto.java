@@ -17,6 +17,9 @@ public class TrackingProblemDto {
     long userId;
     boolean climbed;
     Long attempts;
+    double rating;
     String videoUrl;
     LocalDateTime finishingTime;
 }
+
+

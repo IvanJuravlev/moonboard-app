@@ -15,4 +15,5 @@ public class UpdateTrackingProblemDto {
      boolean climbed;
      Long attempts;
      String videoUrl;
+     Integer rating;
 }

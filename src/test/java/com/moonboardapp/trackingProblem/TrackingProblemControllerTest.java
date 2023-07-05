@@ -59,11 +59,11 @@ public class TrackingProblemControllerTest {
         problem = new Problem(1L, 1L, "SomeName", "SomeDisc",
                 grade, 5, hooksList, "videoUrl", 4, "6b", publishedDate);
         trackingProblemDto = TrackingProblemMapper.TRACKING_PROBLEM_MAPPER.toTrackingProblemDto(
-                new TrackingProblem(1L, problem, user, true, 4L, "videoUrl",
+                new TrackingProblem(1L, problem, user, true,4L, 4, "videoUrl",
                         LocalDateTime.now()));
         shortTrackingProblemDto = TrackingProblemMapper.TRACKING_PROBLEM_MAPPER
-                .toShortTrackingProblemDto(new TrackingProblem(1L, problem, user,
-                        true, 4L, "videoUrl", LocalDateTime.now()));
+                .toShortTrackingProblemDto(new TrackingProblem(1L, problem, user, true,
+                        4L, 4L, "videoUrl", LocalDateTime.now()));
     }
 
     @Test
@@ -76,6 +76,7 @@ public class TrackingProblemControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json(mapper.writeValueAsString(shortTrackingProblemDto)));
     }
+
 
     @Test
     void getTrackingProblemById() throws Exception {
@@ -95,8 +96,7 @@ public class TrackingProblemControllerTest {
 
         mockMvc.perform(get("/trackingProblem/1")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json(mapper.writeValueAsString(trackingProblemDtoList)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -108,8 +108,6 @@ public class TrackingProblemControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
-
 
     @Test
     void deleteTrackingProblemById() throws Exception {

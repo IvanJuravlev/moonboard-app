@@ -4,9 +4,12 @@ import com.moonboardapp.problem.dto.ProblemDto;
 import com.moonboardapp.problem.dto.ProblemUpdateDto;
 import com.moonboardapp.problem.service.ProblemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Validated
@@ -35,13 +38,18 @@ public class ProblemController {
     }
 
     @GetMapping("/user")
-    public List<ProblemDto> getProblemByUserId(@RequestHeader long userId){
-        return problemService.getProblemsByUserId(userId);
+    public List<ProblemDto> getProblemByUserId(@RequestHeader long userId,
+                                               @PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                               @Positive @RequestParam (defaultValue = "20") int size){
+        PageRequest pageRequest = PageRequest.of(from / size, size);
+        return problemService.getProblemsByUserId(userId, pageRequest);
     }
 
     @GetMapping
-    public List<ProblemDto> getAllProblems() {
-        return problemService.getAllProblems();
+    public List<ProblemDto> getAllProblems(@PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                           @Positive @RequestParam (defaultValue = "20") int size) {
+        PageRequest pageRequest = PageRequest.of(from / size, size);
+        return problemService.getAllProblems(pageRequest);
     }
 
     @DeleteMapping("{problemId}")

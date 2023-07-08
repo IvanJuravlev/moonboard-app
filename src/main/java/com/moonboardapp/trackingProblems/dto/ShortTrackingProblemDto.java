@@ -5,6 +5,8 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotNull;
 
+
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,4 +20,5 @@ public class ShortTrackingProblemDto {
     boolean climbed;
     Long attempts;
     String videoUrl;
+    Integer rating;
 }

@@ -26,7 +26,7 @@ import java.util.List;
         @ManyToOne
         @JoinColumn(name = "grade")
         Grade grade;
-        int rating;
+        double rating;
         @ElementCollection
         @CollectionTable(name = "problem_hooks", joinColumns = @JoinColumn(name = "problem_id"))
         List<String> problemNumberField;

@@ -27,7 +27,7 @@ public class ProblemDto {
     List<String> problemNumberField;
     String videoUrl;
     int climbs;
-    int rating;
+    double rating;
     String averageGrade;
     @NotNull
     Timestamp publishedDate;

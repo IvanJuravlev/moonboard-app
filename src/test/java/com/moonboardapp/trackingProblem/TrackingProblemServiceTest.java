@@ -1,9 +1,11 @@
 package com.moonboardapp.trackingProblem;
 
 import com.moonboardapp.exception.NotFoundException;
+import com.moonboardapp.problem.dto.ProblemDto;
 import com.moonboardapp.problem.grades.Grade;
 import com.moonboardapp.problem.model.Problem;
 import com.moonboardapp.problem.repository.ProblemRepository;
+import com.moonboardapp.problem.service.ProblemService;
 import com.moonboardapp.trackingProblems.dto.ShortTrackingProblemDto;
 import com.moonboardapp.trackingProblems.dto.TrackingProblemDto;
 import com.moonboardapp.trackingProblems.dto.UpdateTrackingProblemDto;
@@ -48,6 +50,9 @@ public class TrackingProblemServiceTest {
     @Mock
     ProblemRepository problemRepository;
 
+    @Mock
+    ProblemService problemService;
+
 
     private TrackingProblem trackingProblem;
 
@@ -55,6 +60,7 @@ public class TrackingProblemServiceTest {
 
     private Problem problem;
     private UpdateTrackingProblemDto updateTrackingProblemDto;
+
 
     @BeforeEach
     void beforeEach() {
@@ -65,12 +71,12 @@ public class TrackingProblemServiceTest {
         user = new User(1L, "UserName1", "UserEmail@mail.ru", "UserCity", 5L);
         userRepository.save(user);
         problem = new Problem(1L, 1L, "SomeName", "SomeDisc",
-                grade, 5, hooksList, "videoUrl", 4, "6b", publishedDate);
+                grade, 0, hooksList, "videoUrl", 4, "6b", publishedDate);
         problemRepository.save(problem);
-        trackingProblem = new TrackingProblem(1L, problem, user, false, 4L, "videoUrl",
+        trackingProblem = new TrackingProblem(1L, problem, user, false,4L, 4L, "videoUrl",
                         LocalDateTime.now());
         updateTrackingProblemDto = new UpdateTrackingProblemDto(1L, 1L,
-                true, 6L, "SomeOtherVideo");
+                true, 6L, "SomeOtherVideo", 5);
     }
 
     @Test
@@ -91,6 +97,7 @@ public class TrackingProblemServiceTest {
         assertEquals("videoUrl", trackingProblemDto.getVideoUrl());
     }
 
+
     @Test
     void updateTrackingProblemTest() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -107,6 +114,7 @@ public class TrackingProblemServiceTest {
         assertEquals(6L, trackingProblemDto.getAttempts());
         assertEquals("SomeOtherVideo", trackingProblemDto.getVideoUrl());
     }
+
 
     @Test
     void updateTrackingProblemWithWrongUserTest() {

@@ -5,6 +5,7 @@ import com.moonboardapp.exception.ForbiddenException;
 import com.moonboardapp.exception.NotFoundException;
 import com.moonboardapp.problem.model.Problem;
 import com.moonboardapp.problem.repository.ProblemRepository;
+import com.moonboardapp.problem.service.ProblemService;
 import com.moonboardapp.trackingProblems.dto.ShortTrackingProblemDto;
 import com.moonboardapp.trackingProblems.dto.TrackingProblemDto;
 import com.moonboardapp.trackingProblems.dto.UpdateTrackingProblemDto;
@@ -30,15 +31,21 @@ public class TrackingProblemService {
     private final TrackingProblemRepository repository;
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
+    private final ProblemService problemService;
+
+
 
     @Transactional
     public TrackingProblemDto create(ShortTrackingProblemDto shortTrackingProblemDto) {
         checkUser(shortTrackingProblemDto.getUserId());
-        checkProblem(shortTrackingProblemDto.getProblemId());
+        Problem problem = checkProblem(shortTrackingProblemDto.getProblemId());
         TrackingProblem trackingProblem = TrackingProblemMapper.TRACKING_PROBLEM_MAPPER
                 .toTrackingProblemFromShortDto(shortTrackingProblemDto);
         if (trackingProblem.isClimbed()) {
             trackingProblem.setFinishingTime(LocalDateTime.now());
+        }
+        if (shortTrackingProblemDto.getRating() != null && shortTrackingProblemDto.isClimbed()) {
+            problemService.addRating(problem.getProblemId(), shortTrackingProblemDto.getRating());
         }
         repository.save(trackingProblem);
         log.info("User created with id {}", trackingProblem.getId());
@@ -49,13 +56,15 @@ public class TrackingProblemService {
     public TrackingProblemDto update(long trackingProblemId,
                                      UpdateTrackingProblemDto updateTrackingProblemDto) {
         checkUser(updateTrackingProblemDto.getUserId());
-        checkProblem(updateTrackingProblemDto.getProblemId());
+        Problem problem = checkProblem(updateTrackingProblemDto.getProblemId());
         TrackingProblem trackingProblem = checkTrackingProblem(trackingProblemId);
         if (updateTrackingProblemDto.isClimbed()) {
             trackingProblem.setClimbed(updateTrackingProblemDto.isClimbed());
             trackingProblem.setFinishingTime(LocalDateTime.now());
         }
-
+        if (updateTrackingProblemDto.getRating() != null) {
+            problemService.addRating(problem.getProblemId(), updateTrackingProblemDto.getRating());
+        }
         if (updateTrackingProblemDto.getAttempts() != null) {
             trackingProblem.setAttempts(updateTrackingProblemDto.getAttempts());
         }
@@ -88,8 +97,6 @@ public class TrackingProblemService {
         log.info("TrackingProblem with id {} deleted", trackingProblemId);
     }
 
-
-
     public User checkUser(long userId) {
         return userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException(String.format("User with id %d not found", userId)));
@@ -104,4 +111,7 @@ public class TrackingProblemService {
         return repository.findById(trackingProblemId).orElseThrow(() ->
                 new NotFoundException(String.format("TrackingProblem with id %d not found", trackingProblemId)));
     }
+
 }
+
+

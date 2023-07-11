@@ -81,7 +81,6 @@ public class ProblemServiceTests {
                 grade, 0, hooksList, "videoUrl", 4, "6b", publishedDate);
         trackingProblem = new TrackingProblem(1L, problem, user, false,4L, 5L, "videoUrl",
                 LocalDateTime.now());
-       // trackingProblemRepository.save(trackingProblem);
         trackingProblem = new TrackingProblem(2L, problem, user, false,4L, 4L, "videoUrl",
                 LocalDateTime.now());
         trackingProblemRepository.save(trackingProblem2);

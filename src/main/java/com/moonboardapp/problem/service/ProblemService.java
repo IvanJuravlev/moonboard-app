@@ -11,6 +11,7 @@ import com.moonboardapp.problem.repository.ProblemRepository;
 import com.moonboardapp.user.model.User;
 import com.moonboardapp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +68,8 @@ public class ProblemService {
                 () -> new NotFoundException(String.format("Problem with id %d not found", id))));
     }
 
+
+
     public List<ProblemDto> getProblemsByUserId(long userId, Pageable pageable){
         checkUser(userId);
         List<Problem> problems = problemRepository.findByCreatorId(userId, pageable);
@@ -81,6 +84,13 @@ public class ProblemService {
 
     public List<ProblemDto> getAllProblems(Pageable pageable) {
         List<ProblemDto> problems = problemRepository.findAll(pageable).stream()
+                .map(ProblemMapper.PROBLEM_MAPPER::toProblemDto)
+                .collect(Collectors.toList());
+        return problems;
+    }
+
+    public List<ProblemDto> getAllProblemsByClimbs(PageRequest pageable) {
+        List<ProblemDto> problems = problemRepository.findAllByOrderByClimbsDesc(pageable).stream()
                 .map(ProblemMapper.PROBLEM_MAPPER::toProblemDto)
                 .collect(Collectors.toList());
         return problems;

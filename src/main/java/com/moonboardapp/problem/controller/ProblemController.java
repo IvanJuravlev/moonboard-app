@@ -52,6 +52,13 @@ public class ProblemController {
         return problemService.getAllProblems(pageRequest);
     }
 
+    @GetMapping("/climbs")
+    public List<ProblemDto> getAllProblemsByClimbs(@PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                                   @Positive @RequestParam (defaultValue = "20") int size) {
+        PageRequest pageRequest = PageRequest.of(from / size, size);
+        return problemService.getAllProblemsByClimbs(pageRequest);
+    }
+
     @DeleteMapping("{problemId}")
     public void deleteProblemById(@RequestHeader long userId,
                                 @PathVariable long problemId){

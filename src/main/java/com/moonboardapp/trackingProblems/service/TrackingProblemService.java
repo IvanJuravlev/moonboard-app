@@ -58,6 +58,31 @@ public class TrackingProblemService {
         checkUser(updateTrackingProblemDto.getUserId());
         Problem problem = checkProblem(updateTrackingProblemDto.getProblemId());
         TrackingProblem trackingProblem = checkTrackingProblem(trackingProblemId);
+        if (trackingProblem.getUser().getUserId() != updateTrackingProblemDto.getUserId()) {
+            throw new ForbiddenException("Only owner can change tracking problem");
+        }
+        if (updateTrackingProblemDto.isClimbed()) {
+            trackingProblem.setClimbed(updateTrackingProblemDto.isClimbed());
+            trackingProblem.setFinishingTime(LocalDateTime.now());
+        }
+        if (updateTrackingProblemDto.getRating() != null) {
+            problemService.addRating(problem.getProblemId(), updateTrackingProblemDto.getRating());
+        }
+        if (updateTrackingProblemDto.getAttempts() != null) {
+            trackingProblem.setAttempts(updateTrackingProblemDto.getAttempts());
+        }
+        if (!updateTrackingProblemDto.getVideoUrl().isEmpty()) {
+            trackingProblem.setVideoUrl(updateTrackingProblemDto.getVideoUrl());
+        }
+        return TrackingProblemMapper.TRACKING_PROBLEM_MAPPER.toTrackingProblemDto(trackingProblem);
+    }
+
+    @Transactional
+    public TrackingProblemDto updateByAdmin(long trackingProblemId,
+                                     UpdateTrackingProblemDto updateTrackingProblemDto) {
+        checkUser(updateTrackingProblemDto.getUserId());
+        Problem problem = checkProblem(updateTrackingProblemDto.getProblemId());
+        TrackingProblem trackingProblem = checkTrackingProblem(trackingProblemId);
         if (updateTrackingProblemDto.isClimbed()) {
             trackingProblem.setClimbed(updateTrackingProblemDto.isClimbed());
             trackingProblem.setFinishingTime(LocalDateTime.now());
@@ -94,6 +119,14 @@ public class TrackingProblemService {
         if (trackingProblem.getUser().getUserId() == userId) {
             repository.deleteById(trackingProblemId);
         } else throw new ForbiddenException("Only owner can delete tracking problem");
+        log.info("TrackingProblem with id {} deleted", trackingProblemId);
+    }
+
+    @Transactional
+    public void deleteByAdmin(long userId, long trackingProblemId) {
+        checkUser(userId);
+        TrackingProblem trackingProblem = checkTrackingProblem(trackingProblemId);
+            repository.deleteById(trackingProblemId);
         log.info("TrackingProblem with id {} deleted", trackingProblemId);
     }
 

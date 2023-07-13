@@ -1,5 +1,6 @@
 package com.moonboardapp.problem.service;
 
+import com.moonboardapp.exception.ForbiddenException;
 import com.moonboardapp.problem.dto.ProblemDto;
 import com.moonboardapp.problem.dto.ProblemUpdateDto;
 import com.moonboardapp.problem.grades.Grade;
@@ -50,6 +51,25 @@ public class ProblemService {
         checkUser(userId);
         Problem problem = problemRepository.findById(problemId).orElseThrow(
                 () -> new NotFoundException(String.format("Problem with id %d not found", problemId)));
+        if (problem.getCreatorId() != userId) {
+            throw new ForbiddenException("Only owner can change problem");
+        }
+        if (!changedTrack.getName().isEmpty()) {
+            problem.setName(changedTrack.getName());
+        }
+        if (!changedTrack.getDescription().isEmpty()) {
+            problem.setDescription(changedTrack.getDescription());
+        }
+        if (!changedTrack.getVideoUrl().isEmpty()) {
+            problem.setVideoUrl(changedTrack.getVideoUrl());
+        }
+
+        return ProblemMapper.PROBLEM_MAPPER.toProblemDto(problem);
+    }
+
+    @Transactional
+    public ProblemDto updateProblemByAdmin(long problemId, ProblemUpdateDto changedTrack) {
+        Problem problem = checkProblem(problemId);
         if (!changedTrack.getName().isEmpty()) {
             problem.setName(changedTrack.getName());
         }
@@ -64,8 +84,7 @@ public class ProblemService {
     }
 
     public ProblemDto getProblemById(long id) {
-        return ProblemMapper.PROBLEM_MAPPER.toProblemDto(problemRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(String.format("Problem with id %d not found", id))));
+        return ProblemMapper.PROBLEM_MAPPER.toProblemDto(checkProblem(id));
     }
 
 
@@ -98,7 +117,15 @@ public class ProblemService {
 
     public void deleteProblemById(long userId, long problemId){
         checkUser(userId);
-        getProblemById(problemId);
+        Problem problem = checkProblem(problemId);
+        if (problem.getCreatorId() != userId) {
+            throw new ForbiddenException("Only owner can change problem");
+        }
+        problemRepository.deleteById(problemId);
+    }
+
+    public void deleteProblemByAdmin(long problemId){
+        Problem problem = checkProblem(problemId);
         problemRepository.deleteById(problemId);
     }
 
@@ -116,5 +143,10 @@ public class ProblemService {
     public User checkUser(long userId) {
         return userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException(String.format("User with id %d not found", userId)));
+    }
+
+    public Problem checkProblem(long problemId) {
+        return problemRepository.findById(problemId).orElseThrow(
+                () -> new NotFoundException(String.format("Problem with id %d not found", problemId)));
     }
 }

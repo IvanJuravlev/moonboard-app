@@ -119,7 +119,7 @@ public class ProblemService {
         checkUser(userId);
         Problem problem = checkProblem(problemId);
         if (problem.getCreatorId() != userId) {
-            throw new ForbiddenException("Only owner can change problem");
+            throw new ForbiddenException("Only owner can delete problem");
         }
         problemRepository.deleteById(problemId);
     }

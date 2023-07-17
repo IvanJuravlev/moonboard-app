@@ -29,5 +29,4 @@ public class AdminTrackingProblemController {
                            @RequestParam long userId) {
         service.deleteByAdmin(userId, trackingProblemId);
     }
-
 }

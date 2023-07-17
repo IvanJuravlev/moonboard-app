@@ -1,7 +1,7 @@
 package com.moonboardapp.trackingProblem;
 
+import com.moonboardapp.exception.ForbiddenException;
 import com.moonboardapp.exception.NotFoundException;
-import com.moonboardapp.problem.dto.ProblemDto;
 import com.moonboardapp.problem.grades.Grade;
 import com.moonboardapp.problem.model.Problem;
 import com.moonboardapp.problem.repository.ProblemRepository;
@@ -97,7 +97,6 @@ public class TrackingProblemServiceTest {
         assertEquals("videoUrl", trackingProblemDto.getVideoUrl());
     }
 
-
     @Test
     void updateTrackingProblemTest() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -115,6 +114,22 @@ public class TrackingProblemServiceTest {
         assertEquals("SomeOtherVideo", trackingProblemDto.getVideoUrl());
     }
 
+    @Test
+    void updateTrackingProblemAdminTest() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(problemRepository.findById(1L)).thenReturn(Optional.of(problem));
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(trackingProblem));
+
+        TrackingProblemDto trackingProblemDto =
+                service.updateByAdmin(1L, updateTrackingProblemDto);
+
+        assertEquals(1L, trackingProblemDto.getId());
+        assertEquals(1L, trackingProblemDto.getProblemId());
+        assertEquals(1L, trackingProblemDto.getUserId());
+        assertEquals(true, trackingProblemDto.isClimbed());
+        assertEquals(6L, trackingProblemDto.getAttempts());
+        assertEquals("SomeOtherVideo", trackingProblemDto.getVideoUrl());
+    }
 
     @Test
     void updateTrackingProblemWithWrongUserTest() {
@@ -126,6 +141,20 @@ public class TrackingProblemServiceTest {
                 service.update(1L, updateTrackingProblemDto));
 
         assertEquals("User with id 1 not found", exception.getMessage());
+    }
+
+    @Test
+    void updateTrackingProblemWithWrongOwnerTest() {
+        user.setUserId(2L);
+        trackingProblem.setUser(user);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(problemRepository.findById(1L)).thenReturn(Optional.of(problem));
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(trackingProblem));
+
+        ForbiddenException exception = assertThrows(ForbiddenException.class, () ->
+                service.update(1L, updateTrackingProblemDto));
+
+        assertEquals("Only owner can change tracking problem", exception.getMessage());
     }
 
     @Test
@@ -173,5 +202,30 @@ public class TrackingProblemServiceTest {
         assertFalse(repository.existsById(trackingProblem.getId()));
     }
 
+    @Test
+    void deleteTrackingProblemByAdminTest() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(trackingProblem));
 
+        service.deleteByAdmin(1L, 1L);
+
+        verify(repository, times(1)).findById(trackingProblem.getId());
+        verify(repository, times(1)).deleteById(trackingProblem.getId());
+
+        assertFalse(repository.existsById(trackingProblem.getId()));
+    }
+
+    @Test
+    void deleteTrackingProblemWithWrongOwnerTest() {
+        user.setUserId(2L);
+        trackingProblem.setUser(user);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(problemRepository.findById(1L)).thenReturn(Optional.of(problem));
+        when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(trackingProblem));
+
+        ForbiddenException exception = assertThrows(ForbiddenException.class, () ->
+                service.deleteById(1L, 1L));
+
+        assertEquals("Only owner can delete tracking problem", exception.getMessage());
+    }
 }

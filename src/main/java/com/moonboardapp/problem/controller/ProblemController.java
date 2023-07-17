@@ -5,6 +5,7 @@ import com.moonboardapp.problem.dto.ProblemUpdateDto;
 import com.moonboardapp.problem.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +61,7 @@ public class ProblemController {
     }
 
     @DeleteMapping("{problemId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProblemById(@RequestHeader long userId,
                                 @PathVariable long problemId){
         problemService.deleteProblemById(userId, problemId);

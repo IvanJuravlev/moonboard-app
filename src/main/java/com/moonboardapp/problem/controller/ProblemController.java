@@ -5,6 +5,7 @@ import com.moonboardapp.problem.dto.ProblemUpdateDto;
 import com.moonboardapp.problem.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +53,15 @@ public class ProblemController {
         return problemService.getAllProblems(pageRequest);
     }
 
+    @GetMapping("/climbs")
+    public List<ProblemDto> getAllProblemsByClimbs(@PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                                   @Positive @RequestParam (defaultValue = "20") int size) {
+        PageRequest pageRequest = PageRequest.of(from / size, size);
+        return problemService.getAllProblemsByClimbs(pageRequest);
+    }
+
     @DeleteMapping("{problemId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProblemById(@RequestHeader long userId,
                                 @PathVariable long problemId){
         problemService.deleteProblemById(userId, problemId);

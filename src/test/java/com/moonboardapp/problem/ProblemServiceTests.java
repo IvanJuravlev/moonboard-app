@@ -1,5 +1,6 @@
 package com.moonboardapp.problem;
 
+import com.moonboardapp.exception.ForbiddenException;
 import com.moonboardapp.exception.NotFoundException;
 import com.moonboardapp.problem.dto.ProblemDto;
 import com.moonboardapp.problem.dto.ProblemUpdateDto;
@@ -9,8 +10,6 @@ import com.moonboardapp.problem.mapper.ProblemMapper;
 import com.moonboardapp.problem.model.Problem;
 import com.moonboardapp.problem.repository.ProblemRepository;
 import com.moonboardapp.problem.service.ProblemService;
-import com.moonboardapp.trackingProblems.dto.TrackingProblemDto;
-import com.moonboardapp.trackingProblems.mapper.TrackingProblemMapper;
 import com.moonboardapp.trackingProblems.model.TrackingProblem;
 import com.moonboardapp.trackingProblems.repository.TrackingProblemRepository;
 import com.moonboardapp.trackingProblems.service.TrackingProblemService;
@@ -25,7 +24,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -81,7 +79,6 @@ public class ProblemServiceTests {
                 grade, 0, hooksList, "videoUrl", 4, "6b", publishedDate);
         trackingProblem = new TrackingProblem(1L, problem, user, false,4L, 5L, "videoUrl",
                 LocalDateTime.now());
-       // trackingProblemRepository.save(trackingProblem);
         trackingProblem = new TrackingProblem(2L, problem, user, false,4L, 4L, "videoUrl",
                 LocalDateTime.now());
         trackingProblemRepository.save(trackingProblem2);
@@ -133,6 +130,27 @@ public class ProblemServiceTests {
     }
 
     @Test
+    void updateProblemByAdminTest() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(gradeRepository.findById(1L)).thenReturn(Optional.of(grade));
+        when(problemRepository.findById(1L)).thenReturn(Optional.of(problem));
+
+        ProblemDto problemDto = service.updateProblemByAdmin(1L, problemUpdateDto);
+
+        assertEquals(1L, problemDto.getProblemId());
+        assertEquals(1L, problemDto.getCreatorId());
+        assertEquals("SomeNewName", problemDto.getName());
+        assertEquals("SomeNewDesc", problemDto.getDescription());
+        assertEquals(1, problemDto.getGrade());
+        assertEquals(0, problemDto.getRating());
+        assertEquals(hooksList, problemDto.getProblemNumberField());
+        assertEquals("SomeNewViceoUrl", problemDto.getVideoUrl());
+        assertEquals(4, problemDto.getClimbs());
+        assertEquals("6b", problemDto.getAverageGrade());
+        assertEquals(publishedDate, problemDto.getPublishedDate());
+    }
+
+    @Test
     void getProblemsByUserId() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(gradeRepository.findById(1L)).thenReturn(Optional.of(grade));
@@ -154,6 +172,8 @@ public class ProblemServiceTests {
         assertEquals(publishedDate, problemDtoList.get(0).getPublishedDate());
     }
 
+
+
     @Test
     void updateProblemWithWrongUserId() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -164,6 +184,19 @@ public class ProblemServiceTests {
                 service.updateProblem(2L, 1L, problemUpdateDto));
 
         assertEquals("User with id 2 not found", exception.getMessage());
+    }
+
+    @Test
+    void updateProblemWithWrongOwnerId() {
+        problem.setCreatorId(2L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(gradeRepository.findById(1L)).thenReturn(Optional.of(grade));
+        when(problemRepository.findById(1L)).thenReturn(Optional.of(problem));
+
+        ForbiddenException exception = assertThrows(ForbiddenException.class, () ->
+                service.updateProblem(1L, 1L, problemUpdateDto));
+
+        assertEquals("Only owner can change problem", exception.getMessage());
     }
 
     @Test
@@ -190,5 +223,32 @@ public class ProblemServiceTests {
         verify(problemRepository, times(1)).deleteById(problem.getProblemId());
 
         assertFalse(problemRepository.existsById(problem.getProblemId()));
+    }
+
+    @Test
+    void deleteProblemByAdminTest() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(gradeRepository.findById(1L)).thenReturn(Optional.of(grade));
+        when(problemRepository.findById(1L)).thenReturn(Optional.of(problem));
+
+        service.deleteProblemByAdmin(1L);
+
+        verify(problemRepository, times(1)).findById(problem.getProblemId());
+        verify(problemRepository, times(1)).deleteById(problem.getProblemId());
+
+        assertFalse(problemRepository.existsById(problem.getProblemId()));
+    }
+
+    @Test
+    void deleteProblemWithWrongOwnerTest() {
+        problem.setCreatorId(2L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(gradeRepository.findById(1L)).thenReturn(Optional.of(grade));
+        when(problemRepository.findById(1L)).thenReturn(Optional.of(problem));
+
+        ForbiddenException exception = assertThrows(ForbiddenException.class, () ->
+                service.deleteProblemById(1L, 1L));
+
+        assertEquals("Only owner can delete problem", exception.getMessage());
     }
 }

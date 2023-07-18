@@ -1,5 +1,6 @@
 package com.moonboardapp.user;
 
+import com.moonboardapp.exception.ForbiddenException;
 import com.moonboardapp.exception.NotFoundException;
 import com.moonboardapp.user.dto.UserDto;
 import com.moonboardapp.user.mapper.UserMapper;
@@ -63,6 +64,33 @@ public class UserServiceTest {
     }
 
     @Test
+    void updateUserWithWrongOwnerTest() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user1));
+
+        UserDto userDto = UserMapper.USER_MAPPER.toUserDto(user2);
+
+        final ForbiddenException exception = assertThrows(ForbiddenException.class,
+                () -> userService.updateUser(3L, userDto));
+
+        assertEquals("Only owner can change user", exception.getMessage());
+    }
+
+    @Test
+    void updateUserByAdminTest() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user1));
+
+        UserDto userDto = UserMapper.USER_MAPPER.toUserDto(user2);
+        userService.updateUserByAdmin(33L, userDto);
+
+        assertEquals(1, userDto.getUserId());
+        assertEquals("UserName2", userDto.getName());
+        assertEquals("UserEmail2@mail.ru", userDto.getEmail());
+        assertEquals("UserCity2", userDto.getCity());
+        assertEquals(6, userDto.getRate());
+    }
+
+
+    @Test
     void getUserTest() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user1));
 
@@ -87,10 +115,32 @@ public class UserServiceTest {
     }
 
     @Test
-    void deleteUserWithWrongIdTest() {
+    void deleteUserTest() {
         when(userRepository.findById(user1.getUserId())).thenReturn(Optional.of(user1));
 
         userService.deleteUser(user1.getUserId());
+
+        verify(userRepository, times(1)).findById(user1.getUserId());
+        verify(userRepository, times(1)).deleteById(user1.getUserId());
+
+        assertFalse(userRepository.existsById(user1.getUserId()));
+    }
+
+    @Test
+    void deleteUserWithWrongOwnerTest() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user1));
+
+        final ForbiddenException exception = assertThrows(ForbiddenException.class,
+                () -> userService.deleteUser(3L));
+
+        assertEquals("Only owner can change user", exception.getMessage());
+    }
+
+    @Test
+    void deleteUserByAdminTest() {
+        when(userRepository.findById(user1.getUserId())).thenReturn(Optional.of(user1));
+
+        userService.deleteUserByAdmin(user1.getUserId());
 
         verify(userRepository, times(1)).findById(user1.getUserId());
         verify(userRepository, times(1)).deleteById(user1.getUserId());

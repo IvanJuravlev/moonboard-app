@@ -1,5 +1,6 @@
 package com.moonboardapp.user.service;
 
+import com.moonboardapp.exception.ForbiddenException;
 import com.moonboardapp.exception.NotFoundException;
 import com.moonboardapp.user.dto.ShortUserDto;
 import com.moonboardapp.user.dto.UserDto;
@@ -28,6 +29,25 @@ public class UserService {
     public UserDto updateUser(long userId, UserDto userDto) {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException(String.format("User with id %d not found", userId)));
+        if (user.getUserId() != userId) {
+            throw new ForbiddenException("Only owner can change user");
+        }
+        if (!userDto.getName().isEmpty()) {
+            user.setName(userDto.getName());
+        }
+        if (!userDto.getEmail().isEmpty()) {
+            user.setEmail(userDto.getEmail());
+        }
+        if (!userDto.getCity().isEmpty()) {
+            user.setCity(userDto.getCity());
+        }
+        return UserMapper.USER_MAPPER.toUserDto(user);
+    }
+
+    @Transactional
+    public UserDto updateUserByAdmin(long userId, UserDto userDto) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new NotFoundException(String.format("User with id %d not found", userId)));
         if (!userDto.getName().isEmpty()) {
             user.setName(userDto.getName());
         }
@@ -49,9 +69,17 @@ public class UserService {
     public void deleteUser(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException(String.format("User with id %d not found", userId)));
+        if (user.getUserId() != userId) {
+            throw new ForbiddenException("Only owner can change user");
+        }
         userRepository.deleteById(userId);
         log.info("User with id {} deleted", user.getUserId());
     }
 
-
+    public void deleteUserByAdmin(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new NotFoundException(String.format("User with id %d not found", userId)));
+        userRepository.deleteById(userId);
+        log.info("User with id {} deleted", user.getUserId());
+    }
 }
